@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+<title>Map from SVG</title>
+</head>
+<body>
+
+<script>
+
+fetch("map.svg")
+        .then(response => response.text())
+        .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+        .then(doc => {
+            var rects=[...doc.getElementsByTagName("rect")];
+            var platforms =[];
+            var spikes =[];
+            var spiders =[];
+            var numbers =[];
+            var windows =[];
+            rects.forEach(rect=>{
+                console.log(rect.style.fill)
+                var x= Math.round(rect.getAttribute("x"))/20;
+                var y= Math.round(rect.getAttribute("y"))/20;
+                var w= Math.round(rect.getAttribute("width"))/20;
+                var h= Math.round(rect.getAttribute("height"))/20;
+                if(rect.style.fill=="rgb(0, 0, 0)"){
+                    platforms.push(x,y,w,h);
+                }
+                if(rect.style.fill=="rgb(255, 0, 0)"){
+                    spikes.push(x,y,w,h);
+                }
+                if(rect.style.fill=="rgb(0, 0, 255)"){
+                    spiders.push(x,y,h);
+                }
+                if(rect.style.fill=="rgb(0, 1, 0)"){
+                    numbers.push(0,x,y);
+                }
+                if(rect.style.fill=="rgb(0, 2, 0)"){
+                    numbers.push(2,x,y);
+                }
+                if(rect.style.fill=="rgb(0, 50, 0)"){
+                    windows.push(x,y);
+                }
+            })
+            console.log(platforms.join(','));
+            console.log(spikes.join(','));
+            console.log(spiders.join(','));
+            console.log(numbers.join(','));
+            console.log(windows.join(','));
+        })
+
+</script>
+</body>
+</html>
